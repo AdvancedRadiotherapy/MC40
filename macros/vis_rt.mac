@@ -1,0 +1,72 @@
+# set the verbosity of the run
+/control/verbose                                     1
+/run/verbose                                         1
+/event/verbose                                       0
+
+# set up the geometry of the beamline
+/det/setCollimatorInnerRadius                        22 mm
+/det/setAbsorberDepth                                20 mm
+/det/setAbsorberMaterial                             G4_AIR
+/det/setDynamiteConstruction                         false
+/det/setDynamiteBackingDepth                         5 mm
+/det/setDoubleDynamiteConstruction                   false
+/det/setDoubleDynamiteSeperation                     10 cm
+/det/setTrackerConstruction                          false
+/det/setNTrackers                                    12
+/det/setRangeTelescopeConstruction                   true
+/det/setRangeTelescopeNLayers                        10
+/det/setRangeTelescopeLayerSeperation                1 cm
+/det/setRangeTelescopeAbsorberMaterial               Perspex
+/det/setRangeTelescopeAbsorberThickness              1 mm
+/det/setWaterTankConstruction                        false
+/det/setWaterTankWindowThickness                     1 mm
+/det/update  
+
+# set the physics to be used
+/phys/addPhysics                                     QGSP_BERT_HP
+/phys/setWorldCuts                                   0.7 mm
+/phys/setAbsorberCuts                                0.7 mm
+/phys/setWaterTankCuts                               0.7 mm
+
+# define histogram names
+/histo/setFileName                                   vis_rt
+/histo/setFileType                                   root
+
+#set the particle properties
+/gps/particle                                        proton
+/gps/pos/type                                        Beam
+/gps/pos/shape                                       Circle
+/gps/pos/centre                                      0.0 0.0 -30.0 cm
+/gps/pos/radius                                      23 mm
+/gps/pos/sigma_r                                     0.2 mm
+/gps/direction                                       0 0 1
+
+/gps/energy                                          38.0 MeV
+/gps/ene/type                                        Gauss
+/gps/ene/sigma                                       0.2 MeV
+
+#define the visulation
+/vis/open                                            DAWNFILE
+
+# set camera options
+/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi                    70 20
+/vis/viewer/set/style                                w
+#create a new scene
+/vis/scene/create
+#draw world volume
+/vis/scene/add/volume
+/vis/scene/add/trajectories                         smooth
+/vis/modeling/trajectories/create/drawByCharge
+#attach scene to handler
+/vis/sceneHandler/attach
+/vis/scene/endOfEventAction accumulate              10
+# Re-establish auto refreshing and verbosity:
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
+#/geometry/test/cylinder_test true
+
+# finally run the beam
+/run/initialize
+/run/beamOn                                          10

@@ -1,0 +1,192 @@
+#include "RunAction.hh"
+#include "Run.hh"
+
+#include "G4Run.hh"
+#include "G4UnitsTable.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::RunAction(DetectorConstruction* det, HistoManager* histo, PhysicsList* phys)
+: detector(det), histoManager(histo), physics(phys)
+{
+	edeptot=0;
+	eniel=0;
+}
+
+RunAction::~RunAction()
+{}
+
+void RunAction::BeginOfRunAction(const G4Run* aRun)
+{
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  
+  // 1D Histograms
+  // =============
+  //
+  // define histograms for the whole system
+  histoManager->SetHisto("total.PDGID", "PDGID of all particles in all steps", 6000, -3000, 3000);
+  histoManager->SetHisto("total.dEdx", "Energy deposited in whole system as function of z",9000, -30*cm, 60*cm, "mm");
+  histoManager->SetHisto("total.dEdx(NIEL)", "Energy deposited by NIEL in whole system as function of z",9000, -30*cm, 60*cm, "mm");
+  histoManager->SetHisto("total.EDep(PerEvent)", "Energy deposited in the whole system per event", 200, 0*MeV, 50*MeV, "MeV");
+ 	histoManager->SetHisto("total.NIEL(PerEvent)", "Energy deposited by NIEL in the absorber per event", 200, 0*MeV, 50*MeV, "MeV");
+  
+  
+  histoManager->SetHisto2D("generated.XY", "Scatter plot of generated particle positions",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  
+  // define histograms for the absorber binning
+  G4double length  = detector->GetAbsorberDepth();
+  G4double stepMax = 0.7*mm;//physics->GetStepMaxProcess()->GetMaxStep();
+  G4int nbmin = 100;
+  G4int nbBins = (G4int)(0.5 + length/stepMax);
+  if (nbBins < nbmin) nbBins = nbmin;
+  histoManager->SetHisto("absorber.dEdx", "Energy deposited in absorber as function of depth",nbBins, 0., length, "mm");
+  histoManager->SetHisto("absorber.dEdx(NIEL)", "Energy deposited by NIEL in absorber as function of depth",nbBins, 0., length, "mm");
+  histoManager->SetHisto("absorber.angleX", "Incident angle of particles into absorber (x co-ord)", 100, -5, 5);
+  histoManager->SetHisto("absorber.angleY", "Incident angle of particles into absorber (y co-ord)", 100, -5, 5);
+	histoManager->SetHisto("absorber.incidentEnergy", "Energy of the incident particles into the absorber", 200, 0*MeV, 50*MeV, "MeV");
+ 	histoManager->SetHisto("absorber.exitEnergy", "Energy of the exiting particles from the absorber", 200, 0*MeV, 50*MeV, "MeV");
+ 	histoManager->SetHisto("absorber.EDep(PerEvent)", "Energy deposited in the absorber per", 200, 0*MeV, 50*MeV, "MeV");
+ 	histoManager->SetHisto("absorber.NIEL(PerEvent)", "Energy deposited by NIEL in the absorber per", 200, 0*MeV, 50*MeV, "MeV");
+ 	histoManager->SetHisto2D("absorber.incidentXY", "Scatter plot of all incident particles into absorber", 
+ 													1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm"); 
+ 	
+ 	// define histograms for the dynamite setup
+ 	if(detector->GetDynamiteConstruction())
+ 	{
+	 	histoManager->SetHisto("dynamite.dEdx", "Energy Deposition in dynaMITE as function of z", 101, -0.01*mm, 1.*mm, "mm");
+ 		histoManager->SetHisto("dynamite.dEdx(NIEL)", "Energy Deposition by NIEL in dynaMITE as function of z", 101, -0.01*mm, 1.*mm, "mm"); 	
+ 		histoManager->SetHisto("dynamite.incidentEnergy", "Energy of the incident particles on the sensor", 200, 0*MeV, 50*MeV, "MeV");
+ 		histoManager->SetHisto("dynamite.EDep(PerEvent)", "Energy deposited in the dynamite per event", 200, 0*MeV, 50*MeV, "MeV");
+ 		histoManager->SetHisto("dynamite.NIEL(PerEvent)", "Energy deposited by NIEL in the absorber per event", 200, 0*MeV, 50*MeV, "MeV");
+ 		histoManager->SetHisto2D("dynamite.incidentXY", "Scatter plot of incident particles into the dynamite sensor",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  												
+  	histoManager->SetHisto("absorbertodynamite.ratio", "Ratio between number of particles into sensor and out of absorber", 100, 0.0, 5.0);
+ 		histoManager->SetHisto2D("absorbertodynamite.correlation", "Correlation between number of particles into sensor and out of absorber", 6, -0.5, 5.5, 6, -0.5, 5.5); 
+ 	}
+ 	
+ 	// define the tracker histograms
+ 	if(detector->GetTrackerConstruction())
+ 	{
+ 		histoManager->SetHisto("tracker0.angleX", "Incident angle of particles into tracker0 (x co-ord)", 100, -5, 5);
+  	histoManager->SetHisto("tracker0.angleY", "Incident angle of particles into tracker0 (y co-ord)", 100, -5, 5);
+		histoManager->SetHisto("tracker0.incidentEnergy", "Energy of the incident particles into tracker0", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("tracker0.charged.incidentEnergy", "Energy of the charged particles into tracker0", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("tracker0.neutral.incidentEnergy", "Energy of the neutral particles into tracker0", 200, 0*MeV, 50*MeV, "MeV");
+ 		histoManager->SetHisto("tracker0.exitEnergy", "Energy of the exiting particles from the tracker0", 200, 0*MeV, 50*MeV, "MeV");
+ 	
+ 		histoManager->SetHisto("pcb0.incidentEnergy", "Energy of the incident particles into pcb around tracker0", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("pcb0.charged.incidentEnergy", "Energy of the charged particles into pcb around tracker0", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("pcb0.neutral.incidentEnergy", "Energy of the neutral particles into pcb around tracker0", 200, 0*MeV, 50*MeV, "MeV");
+  	histoManager->SetHisto2D("tracker0.XY", "Scatter plot of particles into tracker0",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  	histoManager->SetHisto2D("tracker0.charged.XY", "Scatter plot of charged particles into tracker0",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  	histoManager->SetHisto2D("tracker0.neutral.XY", "Scatter plot of neutral particles into tracker0",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  	histoManager->SetHisto2D("pcb0.XY", "Scatter plot of particles into pcb around tracker0",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  	histoManager->SetHisto2D("pcb0.charged.XY", "Scatter plot of charged particles into pcb around tracker0",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  	histoManager->SetHisto2D("pcb0.neutral.XY", "Scatter plot of neutral particles into pcb around tracker0",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+ 	
+ 		// last sensor
+ 		histoManager->SetHisto("tracker8.angleX", "Incident angle of particles into tracker8 (x co-ord)", 100, -5, 5);
+  	histoManager->SetHisto("tracker8.angleY", "Incident angle of particles into tracker8 (y co-ord)", 100, -5, 5);
+		histoManager->SetHisto("tracker8.incidentEnergy", "Energy of the incident particles into tracker8", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("tracker8.charged.incidentEnergy", "Energy of the charged particles into tracker8", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("tracker8.neutral.incidentEnergy", "Energy of the neutral particles into tracker8", 200, 0*MeV, 50*MeV, "MeV");
+ 		histoManager->SetHisto("tracker8.exitEnergy", "Energy of the exiting particles from the tracker8", 200, 0*MeV, 50*MeV, "MeV");
+ 	
+ 		histoManager->SetHisto("pcb8.incidentEnergy", "Energy of the incident particles into pcb around tracker8", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("pcb8.charged.incidentEnergy", "Energy of the charged particles into pcb around tracker8", 200, 0*MeV, 50*MeV, "MeV");
+		histoManager->SetHisto("pcb8.neutral.incidentEnergy", "Energy of the neutral particles into pcb around tracker8", 200, 0*MeV, 50*MeV, "MeV");
+  
+	  histoManager->SetHisto2D("tracker8.XY", "Scatter plot of particles into tracker8",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  												
+  	histoManager->SetHisto2D("tracker8.charged.XY", "Scatter plot of charged particles into tracker8",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  												
+  	histoManager->SetHisto2D("tracker8.neutral.XY", "Scatter plot of neutral particles into tracker8",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  												
+  	histoManager->SetHisto2D("pcb8.XY", "Scatter plot of particles into pcb around tracker8",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  												
+  	histoManager->SetHisto2D("pcb8.charged.XY", "Scatter plot of charged particles into pcb around tracker8",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  												
+  	histoManager->SetHisto2D("pcb8.neutral.XY", "Scatter plot of neutral particles into pcb around tracker8",
+  												1000, -20*cm, 20*cm,
+  												1000, -20*cm, 20*cm,
+  												"cm", "cm");
+  }
+
+  
+  
+  
+  
+  histoManager->book();
+}
+/*
+G4Run* RunAction::GenerateRun()
+{
+	return new Run("absorber_mfd");
+}*/
+
+void RunAction::EndOfRunAction(const G4Run* aRun)
+{ 
+	G4cout << " Total energy deposit= "<< G4BestUnit(edeptot,"Energy")
+         << G4endl;
+  G4cout << " niel energy deposit = "<< G4BestUnit(eniel,"Energy")
+         << G4endl;
+
+	//
+	// Dump result for all HitsMap collections.
+	//
+/*	Run* theRun = (Run*)aRun;
+	theRun->DumpData();
+*/
+  // save and clean histo
+  histoManager->save();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+// count up the total energy in the run deposited in sensitive volume
+void RunAction::FillEdep(G4double de, G4double eni) 
+{
+	edeptot += de; 
+	eniel += eni;
+}

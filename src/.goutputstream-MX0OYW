@@ -1,0 +1,202 @@
+#include "SteppingAction.hh"
+#include "G4SteppingManager.hh"
+#include "G4UnitsTable.hh"
+
+#include "math.h"
+
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run, HistoManager* histo, EventAction* event, G4int verbosity)
+:detector(det), runAction(run), histoManager(histo), eventAction(event)
+{
+	verboseLevel = verbosity;
+ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* step)
+{ 
+	G4double edep = step->GetTotalEnergyDeposit();
+  //if (edep <= 0.) return;
+  
+  G4double niel = step->GetNonIonizingEnergyDeposit();
+  runAction->FillEdep(edep, niel); 
+  
+  G4double total_edep = edep + niel; 
+  
+  eventAction->AddStep(step);
+     	
+  G4StepPoint* prePoint     = step->GetPreStepPoint();
+  G4StepPoint* postPoint    = step->GetPostStepPoint();
+  
+	G4VSensitiveDetector* sd  = prePoint->GetSensitiveDetector();
+	G4VPhysicalVolume* pv     = prePoint->GetPhysicalVolume();
+	
+	G4double incidentangleX   = CalculateAngleX(prePoint);
+	G4double incidentangleY   = CalculateAngleY(prePoint);
+	
+	G4double kineticEnergy    = prePoint->GetKineticEnergy();
+	
+	G4int pdg                 = step->GetTrack()->GetDynamicParticle()->GetPDGcode();
+	G4int charge              = step->GetTrack()->GetDynamicParticle()->GetCharge();
+	G4String definition       = step->GetTrack()->GetDynamicParticle()->GetDefinition()->GetParticleName();
+	 
+	G4double z1 = prePoint->GetPosition().z();
+  G4double z2 = postPoint->GetPosition().z();
+  G4double z  = z1 + G4UniformRand()*(z2-z1)  ;            
+	
+	histoManager->FillHisto("total.PDGID", pdg, 1);
+	histoManager->FillHisto("total.dEdx", z, edep);
+	histoManager->FillHisto("total.dEdx(NIEL)", z, niel);
+	
+	// Generated Particles properties
+	//
+	
+	if( pv->GetName() == "beampipeVacuum")// && prePoint->GetStepStatus () == fGeomBoundary) 
+	{
+	
+#ifdef G4ANALYSIS_USE
+		//histoManager->FillHisto(0, kineticEnergy, 1);
+		histoManager->FillHisto2D("generated.XY", prePoint->GetPosition().x(), prePoint->GetPosition().y(), 1);
+#endif		
+		
+		if( verboseLevel>0 )
+		{
+			G4cout << "Generated Particle:" 
+							<< "\n  PDG = " << pdg 
+							<< "\n  Kinetic Energy = " << G4BestUnit(kineticEnergy, "Energy")
+							<< "\n  Charge = " << charge
+							<< "\n  Mass = " << step->GetTrack()->GetDynamicParticle()->GetMass() << G4endl;
+		}
+	}
+	
+	
+	// Properties of the absorber
+  //
+	
+  if( pv->GetName() == "absorber" )
+  {  
+  	eventAction->AddAbsorberStep(step);
+    
+  	// Bragg curve in the absorber  
+ 	 	G4double z1 = prePoint->GetPosition().z();
+  	G4double z2 = postPoint->GetPosition().z();
+  	G4double z  = z1 + G4UniformRand()*(z2-z1) - detector->GetAbsorberPosition() + 0.5*detector->GetAbsorberDepth();
+	
+		if( verboseLevel>0 )
+		{		
+			G4cout << "Stepping Action:"
+					<< "\n Physical Volume Name = " << pv->GetName()
+					<< "\n Sensitive Detector Name = " << sd->GetName()
+  				<< "\n z1 = " << G4BestUnit(z1,"Length") << ", z2 = " << G4BestUnit(z2,"Length") << ", z = " << G4BestUnit(z,"Length")
+  				<< "\n Edep = " << G4BestUnit(edep,"Energy") << std::endl;
+		}
+		
+#ifdef G4ANALYSIS_USE  
+  	histoManager->FillHisto("absorber.dEdx", z, edep);
+  	histoManager->FillHisto("absorber.dEdx(NIEL)", z, niel);
+#endif
+  	
+  	// Properties of the incoming particles from absorber
+  	if( prePoint->GetStepStatus () == fGeomBoundary )
+  	{
+  	
+#ifdef G4ANALYSIS_USE  		
+	  	histoManager->FillHisto("absorber.incident.angleX", incidentangleX, 1);
+			histoManager->FillHisto("absorber.incident.angleY", incidentangleY, 1);
+			histoManager->FillHisto("absorber.incident.Energy", prePoint->GetKineticEnergy(), 1);		
+			histoManager->FillHisto2D("absorber.incident.XY", prePoint->GetPosition().x(), prePoint->GetPosition().y(), 1);
+#endif
+			if( verboseLevel>0 )
+			{	
+				G4cout << "kinetic Energy of Incident Particle upon Absorber = " << G4BestUnit(prePoint->GetKineticEnergy(), "Energy") << G4endl;
+			}
+		}
+		
+		// Properties of the outgoing particles from absorber
+		if( postPoint->GetStepStatus () == fGeomBoundary )
+  	{  	
+#ifdef G4ANALYSIS_USE  		
+			histoManager->FillHisto("absorber.exit.Energy", postPoint->GetKineticEnergy(), 1);
+#endif
+
+			if( verboseLevel>0 )
+			{				
+				G4cout << "kinetic Energy of Exiting Particle from Absorber = " << G4BestUnit(postPoint->GetKineticEnergy(), "Energy") << G4endl;
+			}
+		}
+ 	}
+ 	
+	
+	//	
+	// in the dynamite sensor
+	//
+	if( IsInDynamite(pv->GetName()) && detector->GetDynamiteConstruction() )
+	{ 
+		eventAction->AddDynamiteStep(step);
+			
+		// Bragg curve in the absorber  
+ 	 	G4double z1 = prePoint->GetPosition().z();
+  	G4double z2 = postPoint->GetPosition().z();
+  	G4double z  = z1 + G4UniformRand()*(z2-z1) - detector->GetSensorPosition() + 0.5*detector->GetSensorDepth();
+	  
+	  if( verboseLevel > 0 )	  
+	  {
+	  	G4cout << "In DynAMIte sensor " << G4endl;
+		  G4cout << " pv->GetName()   = " << pv->GetName() << G4endl;
+		  G4cout << " Depth in sensor = " << G4BestUnit(z, "Length") << G4endl;
+		}
+
+#ifdef G4ANALYSIS_USE	  
+  	histoManager->FillHisto("dynamite.dEdx", z, edep);
+  	histoManager->FillHisto("dynamite.dEdx(NIEL)", z, niel);
+#endif
+	
+		// Properties of incoming particles to tracker0
+		if( prePoint->GetStepStatus () == fGeomBoundary && pv->GetName() == "dynamite_Si3N4") 
+		{
+		
+#ifdef G4ANALYSIS_USE		
+			histoManager->FillHisto("dynamite.incident.Energy", prePoint->GetKineticEnergy(), 1);
+			histoManager->FillHisto2D("dynamite.incident.XY", prePoint->GetPosition().x(), prePoint->GetPosition().y(), 1);
+#endif
+			
+		}
+		/*	
+		// Properties if outgoing particles from tracker0
+		if( postPoint->GetStepStatus () == fGeomBoundary )
+  	{  		
+			histoManager->FillHisto(11, kineticEnergy, 1);				
+		}*/
+	}
+	
+}
+
+G4double SteppingAction::CalculateAngleX(G4StepPoint* point)
+{
+	G4double x = point->GetMomentumDirection().x();
+	G4double z = point->GetMomentumDirection().z();
+	G4double theta = atan(x/z) * 180/PI;
+	return theta;
+}
+
+G4double SteppingAction::CalculateAngleY(G4StepPoint* point)
+{
+	G4double y = point->GetMomentumDirection().y();
+	G4double z = point->GetMomentumDirection().z();
+	G4double theta = atan(y/z) * 180/PI;
+	return theta;
+}
+
+bool SteppingAction::IsInDynamite(G4String pvname)
+{
+	if( pvname == "dynamite_Si3N4" ) return true;
+	if( pvname == "dynamite_Si3N4" ) return true; 
+	if( pvname == "dynamite_epi"  ) return true;
+	if( pvname == "dynamite_sub" ) return true; 
+	else return false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

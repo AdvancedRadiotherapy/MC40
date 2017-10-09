@@ -1,0 +1,68 @@
+# set the verbosity of the run
+/control/verbose                                     1
+/run/verbose                                         1
+/event/verbose                                       0
+
+# set up the geometry of the beamline
+/det/setCollimatorInnerRadius                        22 mm
+/det/setAbsorberDepth                                12 um
+/det/setAbsorberMaterial                             Si
+/det/setDynamiteConstruction                         true
+/det/setDynamiteBackingDepth                         5 mm
+/det/setDoubleDynamiteConstruction                   false
+/det/setDoubleDynamiteSeperation                     10 cm
+/det/setTrackerConstruction                          false
+/det/setNTrackers                                    12
+/det/setRangeTelescopeConstruction                   false
+/det/setRangeTelescopeNLayers                        10
+/det/setRangeTelescopeLayerSeperation                1 cm
+/det/setRangeTelescopeAbsorberMaterial               Perspex
+/det/setRangeTelescopeAbsorberThickness              1 mm
+/det/setWaterTankConstruction                        false
+/det/setWaterTankWindowThickness                     1 mm
+/det/update 
+
+########################################
+#
+/score/create/boxMesh boxMesh
+#
+/score/mesh/boxSize 60.0 60.0 .100 mm
+/score/mesh/translate/xyz 0. 0. 1.5 cm
+/score/mesh/nBin 1 1 100
+#
+/score/quantity/doseDeposit doseDepositTest
+/score/quantity/energyDeposit energyDepositTest
+#
+/score/close
+
+
+# set the physics to be used
+/phys/addPhysics                                     QGSP_BERT_HP
+/phys/setWorldCuts                                   0.7 mm
+/phys/setAbsorberCuts                                0.001 mm
+/phys/setWaterTankCuts                               0.001 mm
+
+# define histogram names
+/histo/setFileName                                   rootfiles/run_promptgammas
+/histo/setFileType                                   root
+
+#set the particle properties
+/gps/particle                                        proton
+/gps/pos/type                                        Beam
+/gps/pos/shape                                       Circle
+/gps/pos/centre                                      0.0 0.0 -30.0 cm
+/gps/pos/radius                                      23 mm
+/gps/pos/sigma_r                                     0.2 mm
+/gps/direction                                       0 0 1
+
+/gps/energy                                          29.4 MeV
+/gps/ene/type                                        Gauss
+/gps/ene/sigma                                       0.2 MeV
+
+# finally run the beam
+/run/initialize
+/score/list
+/run/beamOn                                          100000
+
+
+

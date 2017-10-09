@@ -1,0 +1,59 @@
+# set the verbosity of the run
+/control/verbose                                     1
+/run/verbose                                         1
+/event/verbose                                       0
+
+# set up the geometry of the beamline
+# set up the geometry of the beamline
+/det/setCollimatorInnerRadius                        25 mm
+/det/setAbsorberDepth                                10 mm
+/det/setAbsorberMaterial                             Perspex
+/det/setScatteringMaterial G4_Ta
+/det/setScatteringInsideVacuum true
+/det/setFirstScattererThickness 80 um
+#/det/setFirstScattererSize 0.0 10.0 0.05 mm
+/det/setFirstScattererPosition 0.0 0.0 -3300 mm
+/det/setGaFChromicFilmSize 50.0 50.0 0.0 cm
+/det/setGaFChromicFilmPosition 0.0 0.0 300 mm
+/det/update   
+
+# set the physics to be used
+/phys/addPhysics                                     QGSP_BERT_HP
+/phys/setWorldCuts                                   0.7 mm
+/phys/setAbsorberCuts                                0.001 mm
+/phys/setWaterTankCuts                               0.001 mm
+
+# define histogram names
+/histo/setFileName                                   vis
+/histo/setFileType                                   root
+
+#set the particle properties
+/gps/particle                                        proton
+/gps/pos/type                                        Beam
+/gps/pos/shape                                       Circle
+/gps/pos/centre                                      0.0 0.0 -400.0 cm
+/gps/pos/radius                                      5 mm
+/gps/pos/sigma_r                                     0.2 mm
+/gps/direction                                       0 0 1
+
+/gps/energy                                          36.0 MeV
+/gps/ene/type                                        Gauss
+/gps/ene/sigma                                       0.2 MeV
+
+/vis/open OGL 600x600 -0+0
+#/vis/open DAWNFILE 600x400
+#/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi 90 0 deg
+/vis/viewer/set/style s
+/vis/scene/create
+#/vis/scene/add/axes
+#/vis/scene/add/volume
+/vis/scene/add/trajectories smooth
+/vis/sceneHandler/attach
+/vis/scene/endOfEventAction accumulate 10000
+/vis/viewer/set/autoRefresh true
+/vis/viewer/refresh
+
+# finally run the beam
+/run/initialize
+/run/beamOn                                          500

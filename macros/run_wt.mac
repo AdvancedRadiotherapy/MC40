@@ -1,0 +1,48 @@
+# set the verbosity of the run
+/control/verbose                                     1
+/run/verbose                                         1
+/event/verbose                                       0
+
+# set up the geometry of the beamline
+/det/setCollimatorInnerRadius                        4.9 mm
+/det/setAbsorberDepth                                20 um
+/det/setAbsorberMaterial                             G4_AIR
+/det/setWaterTankSensorPosition                      8 mm
+/det/setWaterTankConstruction                        true
+#/det/setWaterTankWindowThickness                     1 mm
+/det/update  
+
+# set the physics to be used
+/phys/addPhysics                                     QGSP_BERT_HP
+/phys/setWorldCuts                                   0.7 mm
+#/phys/setAbsorberCuts                                0.001 mm
+#/phys/setWaterTankCuts                               0.001 mm
+
+# define histogram names
+/histo/setFileName                                   run_wt_offset_12082014
+/histo/setFileType                                   root
+
+#set the particle properties
+/gps/particle                                        proton
+/gps/pos/type                                        Beam
+/gps/pos/shape                                       Circle
+/gps/pos/centre                                      0.0 0.0 -500.0 cm
+/gps/direction                                       0 0 1
+
+/gps/energy                                          36.4 MeV
+/gps/ene/type                                        Gauss
+/gps/ene/sigma                                       0.2 MeV
+
+/gps/pos/radius                                      5.0 mm
+/gps/pos/sigma_r                                     0.1 mm
+
+/gps/ang/type                                        beam2d
+/gps/ang/sigma_x                                     1.6 mrad
+/gps/ang/sigma_y                                     1.6 mrad
+/gps/ang/rot1                                        -1. 0. 0.
+
+
+# finally run the beam
+/run/initialize
+/run/beamOn                                          100000
+

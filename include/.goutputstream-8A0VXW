@@ -1,0 +1,39 @@
+#ifndef DetectorConstructionMessenger_h
+#define DetectorConstructionMessenger_h 1
+
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
+#include "G4UIcmdWithABool.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class DetectorConstructionMessenger: public G4UImessenger
+{
+  public:
+  
+    DetectorConstructionMessenger(DetectorConstruction* );
+   ~DetectorConstructionMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+  
+  DetectorConstruction* pDetectorConstruction;
+    
+  G4UIdirectory*             detDir;        
+  G4UIcmdWithADoubleAndUnit* absDepthCmd; 
+  G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWithAString*        absMaterialCmd;
+  G4UIcmdWithABool*          dynConstructCmd;
+  G4UIcmdWithABool*          trkrConstructCmd;
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif

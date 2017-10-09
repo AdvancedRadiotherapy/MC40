@@ -1,0 +1,48 @@
+#ifndef EventAction_h
+#define EventAction_h 1
+
+#include "G4UserEventAction.hh"
+#include "G4Step.hh"
+#include "HistoManager.hh"
+#include "DetectorConstruction.hh"
+
+class G4Event;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class EventAction : public G4UserEventAction
+{
+  public:
+    EventAction(HistoManager* histo, DetectorConstruction* det);
+   ~EventAction();
+
+  public:
+    void BeginOfEventAction(const G4Event*);
+    void EndOfEventAction(const G4Event*);
+    void AddStep(const G4Step* step);
+    void AddAbsorberStep(const G4Step* step);
+    void AddDynamiteStep(const G4Step* step);
+    
+  private:
+  	HistoManager* histoManager;
+  	DetectorConstruction* detector
+  
+  	G4double             totalEDep;
+  	G4double             totalNIEL;
+  
+  	G4double             absorberEDep;
+  	G4double             absorberNIEL;
+  	std::vector<const G4Step*> absorberSteps;
+  	G4int                nAbsorberIncidentSteps;
+  	G4int                nAbsorberExitingSteps;
+  	G4double             AbsorberIncidentEnergy;
+  	G4double             AbsorberExitingEnergy;
+  	
+  	G4double             dynamiteEDep[6];
+  	G4double             dynamiteNIEL[6];
+  	G4int                nDynamiteIncidentSteps;
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
