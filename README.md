@@ -15,4 +15,10 @@ To run a Bragg peak to test against validation data type
 
 This will simulate 10k primaries and output a file called rootfiles/braggpeak.root
 
+To analyse the data simply run
+
+	'python fit36MeVBraggPeak.py"
+
+This will scale the Bragg Peak to data obtained with ionisation chambers
+
 
