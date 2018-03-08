@@ -182,7 +182,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	//ConstructValidation();
 	
 	ConstructPRaVDATable();
-	f(constructWaterTank)			 ConstructWaterTank();
+	if(constructWaterTank)			 ConstructWaterTank();
 	if(constructScatteringSystem)ConstructScatteringSystem();
 	
 	if(filmType == "EBT3" || filmType == "HD-810")
