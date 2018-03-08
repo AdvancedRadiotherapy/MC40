@@ -32,49 +32,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void							 ConstructBeamline();
     G4VSolid*          ConstructBeampipeVacuum();
     void							 ConstructJig();
-    void			         ConstructDynamiteSensor();
-		void								ConstructDoubleDynamite();
-		void								ConstructPRaVDATable();
+	void								ConstructPRaVDATable();
     void               DefineMaterials();
     void               SetAbsDepth(G4double depth);
     void               SetAbsMaterial(G4String material);
     void							 SetCollimatorInnerRadius(G4double);
     G4double					 GetCollimatorInnerRadius();
 		
-    void							 SetDynamiteConstruction(bool);
-    bool							 GetDynamiteConstruction();
-		void							 SetDynamiteBackingDepth(G4double);
-		G4double					 GetDynamiteBackingDepth();
-		void							 SetDynamitePosition(G4double, G4double, G4double);
-		G4ThreeVector     GetDynamitePosition();
-		void							 SetDoubleDynamiteConstruction(bool);
-		bool							 GetDoubleDynamiteConstruction();
-		void							 SetDoubleDynamiteSeperation(G4double);
-		G4double					 GetDoubleDynamiteSeperation();
-		void 							 SetDoubleDynamiteCollimatorConstruction(bool);
-		void              SetDoubleDynamiteCollimatorPosition(G4ThreeVector);
-		void							 SetDoubleDynamiteCollimatorRotation(G4ThreeVector);
-		void              SetDoubleDynamiteCollimatorMaterial(G4String);
-		void              SetDoubleDynamiteCollimatorThickness(G4double);
-		void              SetDoubleDynamiteCollimatorRadius(G4double);
-
-		
-    void							 SetTrackerConstruction(bool);
-    bool							 GetTrackerConstruction();
-		void								SetNTrackers(G4int);
-		G4int								GetNTrackers();
-    void							 ConstructTracker();
-		
-		void								SetRangeTelescopeConstruction(bool);
-		bool								GetRangeTelescopeConstruction();
-		void								ConstructRangeTelescope();
-		void								SetNRangeTelescopeLayers(G4double);
-		G4double						GetNRangeTelescopeLayers();
-		void 							  SetRangeTelescopeLayersSeperation(G4double);
-		void								SetRangeTelescopeAbsorberThickness(G4double);
-		void								SetRangeTelescopeAbsorberMaterial(G4String);
-		
-		void								SetWaterTankConstruction(bool);
+    	void								SetWaterTankConstruction(bool);
 		bool								GetWaterTankConstruction();
 		void								SetWaterTankWindowThickness(G4double);
 		G4double						GetWaterTankWindowThickness();
@@ -270,62 +235,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   G4double absorber_posz;      
    G4double absDepth;  
    G4Material* absorber_material; 
-   
-  // Dynamite sensor
-  bool     constructDynamite;
-	bool			constructDoubleDynamite;
-	G4int			nDynamites;
-  G4double dynamite_hx;
-  G4double dynamite_hy;
-  G4double dynamite_Si3N4_hz;
-  G4double dynamite_SiO2_hz;
-  G4double dynamite_epi_hz;
-  G4double dynamite_sub_hz;
-  G4double dynamite_back_hz;
-	G4ThreeVector dynamite_pos;
-// 	G4double dynamite_posx;
-// 	G4double dynamite_posy;
-//   G4double dynamite_posz;
-  G4double dynamite_seperation_abs;
-	G4double dynamite_double_seperation;
-	
-	G4double dd_collimator_radius;
-	G4double dd_collimator_hz;
-	G4Material* dd_collimator_material;
-	G4ThreeVector dd_collimator_pos;
-	G4RotationMatrix* dd_collimator_rotation;
-	bool     constructDoubleDynamiteCollimator;
   
-  // Tracking sensors
-  bool			constructTracker;
-  G4double tracker_sensors_hx;
-  G4double tracker_sensors_hy;
-  G4double tracker_sensors_hz;
-  G4double tracker_sensors_n;
-  G4double tracker_sensors_sepz[12];
-  G4double tracker_sensors_posz[12];
-  G4double tracker_seperation_abs;
-  G4double tracker_first_sensor_z;
-  G4VSolid* tracker;
-    G4VSolid* tracker_pcb;
-  G4LogicalVolume* tracker_log[12];
-  G4LogicalVolume* tracker_pcb_log[12];
-  
-  G4VPhysicalVolume* tracker_phys[12];
-  G4VPhysicalVolume* tracker_pcb_phys[12];
-	
-	// Range Telescope
-	bool constructRangeTelescope;
-	G4double nRangeTelescopeLayers;
-	G4double rt_hx;
-	G4double rt_hy;
-	G4double rt_epi_hz;
-	G4double rt_sub_hz;
-	G4double rt_gap_hz;
-	G4double rt_z;
-	G4double rt_absorber_hz;
-	G4Material* rt_absorber_material;
-	
 	// Water Tank
 	
 	bool	constructWaterTank;
