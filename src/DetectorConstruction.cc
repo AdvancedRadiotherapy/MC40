@@ -131,13 +131,13 @@ DetectorConstruction::DetectorConstruction()
 	validation_pos[3] = G4ThreeVector(0.0,0.0,110.0*cm);
 	
 	scattererCollimator_radius = 5*mm;
-	scattering_material = Cu;
-	firstScattererPosition = G4ThreeVector(0.0*cm, 0.0*cm, 2*cm);
+	scattering_material = Ta;
+	firstScattererPosition = G4ThreeVector(0.0*cm, 0.0*cm, -3200*mm);
 	firstScattererSize = G4ThreeVector(0.0*mm, 10.0*mm, 100*um);
-	firstScattererThickness = 100*um;
+	firstScattererThickness = 80*um;
 	gafFilmPosition = G4ThreeVector(0.0*cm, 0.0*cm, 45*cm);
 	gafFilmSize = G4ThreeVector(5*cm, 5*cm, 0.0*cm); // do not allow Z to change so hard code later
-	scattererInVacuum = false;
+	scattererInVacuum = true;
 	reverseFilm = false;
 	
 	silicon_pos = 11.2*mm;
@@ -183,7 +183,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	
 	ConstructPRaVDATable();
 	if(constructWaterTank)			 ConstructWaterTank();
-	if(constructScatteringSystem)ConstructScatteringSystem();
+	if(constructScatteringSystem)	ConstructScatteringSystem();
 	
 	if(filmType == "EBT3" || filmType == "HD-810")
 		ConstructGaFChromicFilm();
@@ -334,7 +334,7 @@ void DetectorConstruction::ConstructBeamline()
 	}
 				
 	// PMMA Jig
-	ConstructJig();
+	//ConstructJig();
 }	
 
 void DetectorConstruction::ConstructPRaVDATable()
@@ -722,19 +722,6 @@ G4double DetectorConstruction::GetWaterTankDepth()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetScatteringMaterial(G4String material)
-{
-	G4Material* pttoMaterial = G4Material::GetMaterial(material);  
-  if (pttoMaterial)
-  {
-    scattering_material = pttoMaterial;
-  }  
-  else {
-  	G4cout << "### DetectorConstruction::SetScatteringMaterial : Cannot find material " << material << G4endl;
-  }
-}
-
 void DetectorConstruction::ConstructScatteringSystem()
 {
 	// this will give the brass collimator
@@ -750,7 +737,7 @@ void DetectorConstruction::ConstructScatteringSystem()
 	
 	// the scatterer volumes
 	firstScatterer = new G4Tubs("firstScatterer", 0.0*mm, 20*mm, firstScattererThickness/2, 0, CLHEP::twopi);
-	firstScatterer_log = new G4LogicalVolume(firstScatterer, scattering_material, "firstScatterer_log");
+	firstScatterer_log = new G4LogicalVolume(firstScatterer, Ta, "firstScatterer_log");
 	
 	// get the center of the vacuum and translate the required world position into vacuum coordinates
 	G4ThreeVector vacuumCenter = G4PhysicalVolumeStore::GetInstance()->GetVolume("vacuum")->GetTranslation();
@@ -784,46 +771,6 @@ void DetectorConstruction::ConstructScatteringSystem()
 	
 	
 }
-
-// void DetectorConstruction::ConstructScatteringSystem()
-// {
-// 	G4cout << "First Scatterer Size = " << firstScattererSize << G4endl;
-// 	G4cout << "First Scatterer Position = " << firstScattererPosition << G4endl;
-// 	G4cout << "GaFFilm Position = " << gafFilmPosition << G4endl;
-// 	
-// 	G4VSolid* scattererCollimator_whole = new G4Box("scattererCollimator_whole", 5*cm, 5*cm, 1*mm);
-// 	G4VSolid* scattererCollimator_hole = new G4Tubs("scattererCollimator_hole", 0*cm, -, 1*mm, 0, CLHEP::twopi);
-// 	scattererCollimator = new G4SubtractionSolid("scattererCollimator", scattererCollimator_whole, scattererCollimator_hole);
-// 	scattererCollimator_log = new G4LogicalVolume(scattererCollimator, Ta, "scattererCollimator_log");
-// 	
-// 	firstScatterer = new G4Tubs("firstScatterer", 0.0*mm, 20*mm, firstScattererThickness/2, chamber_startingangle, chamber_spanningangle);
-// 	firstScatterer_log = new G4LogicalVolume(firstScatterer, scattering_material, "firstScatterer_log");
-// // 	G4double uStepMax = .2*um;
-// //   //G4double uTrakMax = 0.002*um;
-// //   G4UserLimits* stepLimit = new G4UserLimits();///uStepMax,uTrakMax);
-// //   stepLimit->SetMaxAllowedStep(uStepMax);
-// //   firstScatterer_log->SetUserLimits(stepLimit);
-// 	
-// 	//now see if we build inside the vacuum or in the world volume
-// 	if(!scattererInVacuum)
-// 	{
-// 	/*	G4ThreeVector pos = G4ThreeVector(firstScattererPosition[0], firstScattererPosition[1], 0.5*cm);
-// 		scattererCollimator_phys = new G4PVPlacement(0, pos, scattererCollimator_log, "scattererCollimator_phys", expHall_log, false, 0);
-// 	*/	firstScatterer_phys = new G4PVPlacement(0, firstScattererPosition, firstScatterer_log, "firstScatterer_phys", expHall_log, false, 0);
-// 	}
-// 	else
-// 	{
-// 	/*	G4ThreeVector pos = G4ThreeVector(firstScattererPosition[0], firstScattererPosition[1], 0.5*cm);
-// 		scattererCollimator_phys = new G4PVPlacement(0, pos, scattererCollimator_log, "scattererCollimator_phys", vac_log, false, 0);
-// 	*/	
-// 		// get the center of the vacuum and translate the required world position into vacuum coordinates
-// 		G4ThreeVector vacuumCenter = G4PhysicalVolumeStore::GetInstance()->GetVolume("vacuum")->GetTranslation();
-// 		G4ThreeVector vacuumPos = firstScattererPosition - vacuumCenter;
-// 		G4cout << "vacuumPos = " << vacuumCenter << G4endl;
-// 		firstScatterer_phys = new G4PVPlacement(0, vacuumPos, firstScatterer_log, "firstScatterer_phys", vac_log, false, 0);
-// 	}
-// 	
-// }
 
 void DetectorConstruction::ConstructGaFChromicFilm()
 {

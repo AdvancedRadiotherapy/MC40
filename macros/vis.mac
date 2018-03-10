@@ -5,14 +5,14 @@
 
 # set up the geometry of the beamline
 # set up the geometry of the beamline
-/det/setCollimatorInnerRadius                        25 mm
+/det/setCollimatorInnerRadius                        2 mm
 /det/setAbsorberDepth                                10 mm
 /det/setAbsorberMaterial                             Perspex
-/det/setScatteringMaterial G4_Ta
-/det/setScatteringInsideVacuum true
-/det/setFirstScattererThickness 80 um
+#/det/setScatteringMaterial G4_Ta
+#/det/setScatteringInsideVacuum true
+#/det/setFirstScattererThickness 80 um
 #/det/setFirstScattererSize 0.0 10.0 0.05 mm
-/det/setFirstScattererPosition 0.0 0.0 -3300 mm
+#/det/setFirstScattererPosition 0.0 0.0 -3300 mm
 /det/setGaFChromicFilmSize 50.0 50.0 0.0 cm
 /det/setGaFChromicFilmPosition 0.0 0.0 300 mm
 /det/update   

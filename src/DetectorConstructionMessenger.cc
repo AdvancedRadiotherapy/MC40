@@ -51,41 +51,13 @@ wtConstructCmd = new G4UIcmdWithABool("/det/setWaterTankConstruction", this);
 	wtSensorPositionCmd->AvailableForStates(G4State_Idle, G4State_PreInit);
 	wtSensorPositionCmd->SetUnitCategory("Length");
    
-	
-	scattererColRadiusCmd = new G4UIcmdWithADoubleAndUnit("/det/setScatteringCollimatorRadius", this);
-	scattererColRadiusCmd->SetParameterName("ScatteringCollimatorRadius", false);
-  scattererColRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-	scattererColRadiusCmd->SetUnitCategory("Length");
-	
-  scatteringMaterialCmd = new G4UIcmdWithAString("/det/setScatteringMaterial", this);
-  scatteringMaterialCmd->SetGuidance("Set the material of scattering system");
-  scatteringMaterialCmd->SetDefaultValue("Copper");
-  scatteringMaterialCmd->SetParameterName("ScatteringMaterial", false);
-  scatteringMaterialCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-	
-	scatteringVolumeCmd = new G4UIcmdWithABool("/det/setScatteringInsideVacuum", this);
-	//scatteringVolumeCmd->SetDefaultValue("False");
+
+	scatteringVolumeCmd = new G4UIcmdWithABool("/det/insertScatteringFoil", this);
+	scatteringVolumeCmd->SetDefaultValue("False");
 	scatteringVolumeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-	
-  firstScattererSizeCmd = new G4UIcmdWith3VectorAndUnit("/det/setFirstScattererSize",this);
-  firstScattererSizeCmd->SetGuidance("Set the size of the first scattering material");
-  firstScattererSizeCmd->SetParameterName("ScattererInnerRadius", "ScattererOuterRadius", "ScattererThickness", false);
-  firstScattererSizeCmd->SetDefaultUnit("mm");
-  firstScattererSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);	
-	
-	firstScattererThicknessCmd = new G4UIcmdWithADoubleAndUnit("/det/setFirstScattererThickness",this);
-  firstScattererThicknessCmd->SetGuidance("Set the thickness of the first scattering material");
-  firstScattererThicknessCmd->SetParameterName("ScattererThickness", false);
-  firstScattererThicknessCmd->SetDefaultUnit("mm");
-  firstScattererThicknessCmd->AvailableForStates(G4State_PreInit,G4State_Idle);	
-	
-	firstScattererPositionCmd = new G4UIcmdWith3VectorAndUnit("/det/setFirstScattererPosition",this);
-  firstScattererPositionCmd->SetGuidance("Set the position of the first scattering material");
-  firstScattererPositionCmd->SetParameterName("ScattererPosX", "ScattererPosY", "ScattererPosZ", false);
-  firstScattererPositionCmd->SetDefaultUnit("mm");
-  firstScattererPositionCmd->AvailableForStates(G4State_PreInit,G4State_Idle);	
-  
-	filmTypeCmd = new G4UIcmdWithAString("/det/setGaFChromicFilmType", this);
+
+
+filmTypeCmd = new G4UIcmdWithAString("/det/setGaFChromicFilmType", this);
 	filmTypeCmd->SetGuidance("Choose the type of film being used. Default Value is \"None\"");
 	filmTypeCmd->SetParameterName("GaFType",false);
 	filmTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -118,22 +90,15 @@ DetectorConstructionMessenger::~DetectorConstructionMessenger()
 /////////////////////////////////////////////////////////////////////////////
 void DetectorConstructionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {   
-	if( command == scattererColRadiusCmd )
-		pDetectorConstruction->SetScattererCollimatorRadius(scattererColRadiusCmd->GetNewDoubleValue(newValue));
-  if( command == scatteringMaterialCmd )
-    pDetectorConstruction->SetScatteringMaterial(newValue);
-	if( command == scatteringVolumeCmd )
-		pDetectorConstruction->SetScattererInsideVacuum(scatteringVolumeCmd->GetNewBoolValue(newValue));
-  if(  command == firstScattererSizeCmd )
-    pDetectorConstruction->SetFirstScattererSize(firstScattererSizeCmd->GetNew3VectorValue(newValue));
-	if( command == firstScattererThicknessCmd)
-		pDetectorConstruction->SetFirstScattererThickness(firstScattererThicknessCmd->GetNewDoubleValue(newValue));
-	if(  command == firstScattererPositionCmd )
-		pDetectorConstruction->SetFirstScattererPosition(firstScattererSizeCmd->GetNew3VectorValue(newValue));	
-  if(  command == filmSizeCmd )
+if( command == scatteringVolumeCmd )
+		pDetectorConstruction->SetScatteringSystemConstruction(scatteringVolumeCmd->GetNewBoolValue(newValue));
+
+ if(  command == filmSizeCmd )
     pDetectorConstruction->SetGaFChromicFilmSize(filmSizeCmd->GetNew3VectorValue(newValue));
+
 	if(  command == filmPositionCmd )
     pDetectorConstruction->SetGaFChromicFilmPosition(filmSizeCmd->GetNew3VectorValue(newValue));
+
  if( command == filmTypeCmd )
 		pDetectorConstruction->SetGaFChromicFilmType(newValue);
   

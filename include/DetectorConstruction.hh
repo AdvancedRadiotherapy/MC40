@@ -50,12 +50,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 		
 		void SetScatteringSystemConstruction(bool construct) { constructScatteringSystem = construct; };
 		bool GetScatteringSystemConstruction() { return constructScatteringSystem; };
-		void SetScattererCollimatorRadius(G4double r) { scattererCollimator_radius = r; };
-		void SetFirstScattererSize(G4ThreeVector size) { firstScattererSize = size; };
-		void SetFirstScattererThickness(G4double t) { firstScattererThickness = t; };
-		void SetFirstScattererPosition(G4ThreeVector pos) { firstScattererPosition = pos; };
-		void SetScatteringMaterial(G4String);
-		void SetScattererInsideVacuum(G4bool b) { scattererInVacuum = b; };
 		void ConstructScatteringSystem();
 		void ConstructBeamMonitor(G4double z);
 		

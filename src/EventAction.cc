@@ -55,12 +55,11 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 	beampipe_pos_int.clear();
 	
 	G4PrimaryVertex* primaryVertex = evt->GetPrimaryVertex();
-  G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
-  //G4double ke = primaryParticle->GetKineticEnergy();
+    G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
+    //G4double ke = primaryParticle->GetKineticEnergy();
 	G4ThreeVector pos = primaryVertex	->GetPosition();
 	if(pos[1]<0.5*mm && pos[1]>-0.5*mm)
-		histoManager->FillHisto("generated.X", pos[0],1);
-	histoManager->FillHisto2D("generated.XY",pos[0],pos[1],1);
+	    histoManager->FillHisto2D("generated.XY",pos[0],pos[1],1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,12 +86,6 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 		}
 	}
  
-	histoManager->FillHisto("total.EDep(PerEvent)", totalEDep, 1);
-	histoManager->FillHisto("total.NIEL(PerEvent)", totalNIEL, 1);
-
-  histoManager->FillHisto("absorber.EDep(PerEvent)", absorberEDep, 1);
-  histoManager->FillHisto("absorber.NIEL(PerEvent)", absorberNIEL, 1);
-	
 	if(sensorEDEP>0)
 		histoManager->FillHisto("sensor_WT_edep",sensorEDEP,1);
 

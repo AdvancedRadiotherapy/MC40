@@ -4,11 +4,13 @@
 /event/verbose                                       0
 
 # set up the geometry of the beamline
-/det/setCollimatorInnerRadius                        22 mm
-/det/setScatteringMaterial G4_AIR
-/det/setScatteringInsideVacuum true
-/det/setFirstScattererThickness 80 um
-/det/setFirstScattererPosition 0.0 0.0 -3200 mm
+/det/setCollimatorInnerRadius                        1 mm
+#/det/setScatteringMaterial G4_Ta
+#/det/setScatteringInsideVacuum true
+#/det/setFirstScattererThickness 80 um
+#/det/setFirstScattererPosition 0.0 0.0 -3200 mm
+
+/det/insertScatteringFoil True
 
 /det/setAbsorberDepth                                12 mm
 /det/setAbsorberMaterial                             G4_PLEXIGLASS
@@ -22,14 +24,14 @@
 #/phys/setWaterTankCuts                               0.001 mm
 
 # define histogram names
-/histo/setFileName                                   rootfiles/run_slc6_gcc4.8.1_geant4.10.1.p02
+/histo/setFileName                                   rootfiles/run_80umTa_ubuntu16.04_Win10_gcc5.4.0_geant4.10.2.p03
 /histo/setFileType                                   root
 
 #set the particle properties
 /gps/particle                                        proton
 /gps/pos/type                                        Beam
 /gps/pos/shape                                       Circle
-/gps/pos/centre                                      0.0 0.0 -310.0 cm
+/gps/pos/centre                                      0.0 0.0 -350.0 cm
 /gps/direction                                       0 0 1
 
 /gps/energy                                          36.4 MeV
@@ -44,5 +46,5 @@
 
 # finally run the beam
 /run/initialize
-/run/beamOn                                          10000
+/run/beamOn                                          1000000
 

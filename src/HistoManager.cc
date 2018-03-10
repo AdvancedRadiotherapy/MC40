@@ -446,6 +446,7 @@ G4int HistoManager::GetHisto2DAddress(const G4String& label)
 	{
 		if( histo2DInfo[i].Label == label ) address = i;
 	}
+    if(address<0) G4cerr << "Histogram2D " << label << " not defined" << G4endl;
 	assert(address>=0);
 	return address;
 }

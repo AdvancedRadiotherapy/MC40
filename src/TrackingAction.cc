@@ -22,14 +22,13 @@ TrackingAction::~TrackingAction()
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
     if(aTrack->GetDynamicParticle()->GetPDGcode()==22) {
-    G4cout << "New track #"
+        G4cout << "New track #"
            << aTrack->GetTrackID() << " of " 
            << aTrack->GetParticleDefinition()->GetParticleName()
            << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
            << " parent # " << aTrack->GetParentID()
            << G4endl;
-           
-    histoManager->FillHisto("total.Energy.gamma", aTrack->GetKineticEnergy()/MeV);
+             
     }
 }
 
