@@ -131,7 +131,7 @@ DetectorConstruction::DetectorConstruction()
 	validation_pos[3] = G4ThreeVector(0.0,0.0,110.0*cm);
 	
 	scattererCollimator_radius = 5*mm;
-	scattering_material = Ta;
+	scattering_material = Air;
 	firstScattererPosition = G4ThreeVector(0.0*cm, 0.0*cm, -3200*mm);
 	firstScattererSize = G4ThreeVector(0.0*mm, 10.0*mm, 100*um);
 	firstScattererThickness = 80*um;
@@ -143,7 +143,7 @@ DetectorConstruction::DetectorConstruction()
 	silicon_pos = 11.2*mm;
 	
 	constructWaterTank = false;
-	constructScatteringSystem = true;
+	constructScatteringSystem = false;
 	
 	filmType = "None";
 
@@ -564,12 +564,12 @@ void DetectorConstruction::DefineMaterials()
 	//Kapton->AddMaterial(O, fractionmass=0.2094);
 	Kapton = man->FindOrBuildMaterial("G4_KAPTON");
 	// Perspex
-	//	Perspex = man->FindOrBuildMaterial("G4_PLEXIGLASS");
-	Perspex = new G4Material("Perspex", density=1.19*g/cm3, ncomponents=3);
+	Perspex = man->FindOrBuildMaterial("G4_PLEXIGLASS");
+	/*Perspex = new G4Material("Perspex", density=1.19*g/cm3, ncomponents=3);
 	Perspex->AddMaterial(C, fractionmass=0.59984);//0.600);
 	Perspex->AddMaterial(O, fractionmass=0.31962);//0.320);
 	Perspex->AddMaterial(H, fractionmass=0.08054);//0.080);
-	Perspex->GetIonisation()->SetMeanExcitationEnergy(74.0*eV);
+	Perspex->GetIonisation()->SetMeanExcitationEnergy(74.0*eV);*/
 	G4cout << "Perspex->GetIonisation()->GetMeanExcitationEnergy() = " <<  Perspex->GetIonisation()->GetMeanExcitationEnergy()/eV << G4endl;
 	// Havar (to match fluka)
 	Havar = new G4Material("Havar", density=8.3*g/cm3, ncomponents=8);
@@ -655,7 +655,7 @@ void DetectorConstruction::ConstructWaterTank()
  	G4Box* col1 = new G4Box("col1", 2*cm, 2*cm, 1*mm);
  	G4Tubs* col2 = new G4Tubs("col2", 0.0*mm, 0.5*mm, 1*mm, beampipe_angle, beampipe_spanning);
  	G4SubtractionSolid* col = new G4SubtractionSolid("col", col1, col2);
- 	G4LogicalVolume* colLV = new G4LogicalVolume(col, Ta, "colLV");
+ 	G4LogicalVolume* colLV = new G4LogicalVolume(col, Air, "colLV");
  	G4RotationMatrix* colrot = new G4RotationMatrix(0,0,0);
 // // 	//colrot->rotateY(5*deg);
  	 new G4PVPlacement(colrot, G4ThreeVector(0,0,13.0*cm), colLV, "colPV", expHall_log, false, 0);
@@ -724,6 +724,9 @@ G4double DetectorConstruction::GetWaterTankDepth()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DetectorConstruction::ConstructScatteringSystem()
 {
+
+	G4cout << "DetectorConstruction::ConstructScatteringSystem()" << G4endl;
+
 	// this will give the brass collimator
 	G4double scattCol_hz = 5*mm;
 	scattererCollimator = new G4Tubs("scattererCollimator_whole", 0.5*cm, 3*cm, scattCol_hz, 0, CLHEP::twopi);	
@@ -737,7 +740,7 @@ void DetectorConstruction::ConstructScatteringSystem()
 	
 	// the scatterer volumes
 	firstScatterer = new G4Tubs("firstScatterer", 0.0*mm, 20*mm, firstScattererThickness/2, 0, CLHEP::twopi);
-	firstScatterer_log = new G4LogicalVolume(firstScatterer, Ta, "firstScatterer_log");
+	firstScatterer_log = new G4LogicalVolume(firstScatterer, scattering_material, "firstScatterer_log");
 	
 	// get the center of the vacuum and translate the required world position into vacuum coordinates
 	G4ThreeVector vacuumCenter = G4PhysicalVolumeStore::GetInstance()->GetVolume("vacuum")->GetTranslation();

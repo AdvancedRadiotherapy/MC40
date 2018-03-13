@@ -103,7 +103,7 @@ data = ROOT.TGraphErrors(nPoints, perspexDepth, chargeRatio, perspexDepthError, 
 ##
 ## Get the simulated bragg peak histogram for QGSP_BIC_EMY
 ##
-fin_bic = ROOT.TFile('rootfiles/run_80umTa_ubuntu16.04_Win10_gcc5.4.0_geant4.10.2.p03.root')
+fin_bic = ROOT.TFile('rootfiles/run_80umAir_ubuntu16.04_Win10_gcc5.4.0_geant4.10.2.p03.root')
 bp_bic = fin_bic.Get("absorber.dEdx.Marcus")
 #bp_bic.UseCurrentStyle()
 bp_bic.SetStats(0)
