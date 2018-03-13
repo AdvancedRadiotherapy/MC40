@@ -25,10 +25,10 @@ class RunAction : public G4UserRunAction
     
   private:
   	G4double edeptot; 
-		G4double eniel;
-		DetectorConstruction* detector;
-		HistoManager*         histoManager;
-		PhysicsList*          physics;
+	G4double eniel;
+	DetectorConstruction* detector;
+	HistoManager*         histoManager;
+	PhysicsList*          physics;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

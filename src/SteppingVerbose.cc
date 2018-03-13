@@ -22,8 +22,8 @@ void SteppingVerbose::StepInfo()
   G4int prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
-    if( verboseLevel >= 4 ) VerboseTrack();
-    if( verboseLevel >= 3 ){
+  if( verboseLevel >= 4 ) VerboseTrack();
+  if( verboseLevel >= 3 ){
       G4cout << G4endl;    
       G4cout << std::setw( 5) << "#Step#"     << " "
 	     << std::setw( 6) << "X"          << "    "

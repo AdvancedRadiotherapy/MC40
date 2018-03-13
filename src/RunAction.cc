@@ -63,11 +63,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     histoManager->SetHisto("absorber.incident.angleX", "Incident angle of particles into absorber (x co-ord); Angle [degrees]", 100, -5, 5);
     histoManager->SetHisto("absorber.incident.angleY", "Incident angle of particles into absorber (y co-ord); Angle [degrees]", 100, -5, 5);
 	histoManager->SetHisto("absorber.incident.Energy", "Energy of the incident particles into the absorber; Energy [MeV]", 200, 0*MeV, 50*MeV, "MeV");
-	histoManager->SetHisto2D("absorber.incident.Energy.XY", "Scatter plot of all incident particles energy into absorber; x [cm]; y [cm]", 
- 													400, -5*cm, 5*cm,
-  												400, -5*cm, 5*cm,
-  												"cm", "cm"); 	
-    histoManager->SetHisto2D("absorber.exit.XY", "Scatter plot of all particles exiting absorber into absorber; x [cm]; y [cm]", 
+   histoManager->SetHisto2D("absorber.exit.XY", "Scatter plot of all particles exiting absorber into absorber; x [cm]; y [cm]", 
  													400, -5*cm, 5*cm,
   												400, -5*cm, 5*cm,
   												"cm", "cm");	

@@ -26,20 +26,20 @@ class DetectorConstructionMessenger: public G4UImessenger
     
   private:
   
-  DetectorConstruction* pDetectorConstruction;
-    
-  G4UIdirectory*             detDir;        
-  G4UIcmdWithADoubleAndUnit* absDepthCmd; 
-  G4UIcmdWithADoubleAndUnit* colInnerRadiusCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
-  G4UIcmdWithAString*        absMaterialCmd;
-G4UIcmdWithABool*					wtConstructCmd;
+    DetectorConstruction* pDetectorConstruction;
+      
+    G4UIdirectory*             detDir;        
+    G4UIcmdWithADoubleAndUnit* absDepthCmd; 
+    G4UIcmdWithADoubleAndUnit* colInnerRadiusCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString*        absMaterialCmd;
+    G4UIcmdWithABool*					wtConstructCmd;
 	G4UIcmdWithADoubleAndUnit*	wtWindowThicknessCmd;
 	G4UIcmdWithADoubleAndUnit* wtSensorPositionCmd;
 	
 	G4UIcmdWithABool*          scatteringVolumeCmd;
- G4UIcmdWith3VectorAndUnit* filmSizeCmd;
-  G4UIcmdWith3VectorAndUnit* filmPositionCmd;
+    G4UIcmdWith3VectorAndUnit* filmSizeCmd;
+    G4UIcmdWith3VectorAndUnit* filmPositionCmd;
 	G4UIcmdWithAString*        filmTypeCmd;
 };
 

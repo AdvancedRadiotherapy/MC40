@@ -26,31 +26,32 @@ class EventAction : public G4UserEventAction
 	void AddAirGapStep(const G4Step* step);
 	void AddValidationStep(const G4Step* step);
 	
-		//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-		void AddBeamPipePosition(G4ThreeVector pos){ beampipe_pos_int.push_back(pos);};
-		void ProtonInAbsorber(G4bool b){ pInAbsorber = b; };
+	//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+	void AddBeamPipePosition(G4ThreeVector pos){ beampipe_pos_int.push_back(pos);};
+	void ProtonInAbsorber(G4bool b){ pInAbsorber = b; };
 
 		
 		
-		G4ThreeVector ProjectTrack(G4ThreeVector trajectory, G4double z);
+	G4ThreeVector ProjectTrack(G4ThreeVector trajectory, G4double z);
 		
-		G4double ConvertEDeptoElectrons(G4double);
-		G4int			GetEventID();
-		G4int			GetRndmSeed();
+	G4double ConvertEDeptoElectrons(G4double);
+	G4int			GetEventID();
+	G4int			GetRndmSeed();
+
   private:
   	HistoManager* histoManager;
   	DetectorConstruction* detector;
 		
-		G4int event_id;
-		G4int rndm_seed;
+	G4int event_id;
+	G4int rndm_seed;
 		
-		std::vector<G4ThreeVector> beampipe_pos_int;
-		G4bool pInAbsorber;
+	std::vector<G4ThreeVector> beampipe_pos_int;
+	G4bool pInAbsorber;
 	G4double totalEdepAirGapPerEvent;
   	G4double             totalEDep;
   	G4double             totalNIEL;
 		
-		G4double             sensorEDEP;
+	G4double             sensorEDEP;
   
   	G4double             absorberEDep;
   	G4double             absorberNIEL;

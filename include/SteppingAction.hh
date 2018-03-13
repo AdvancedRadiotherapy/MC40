@@ -20,18 +20,14 @@ class SteppingAction : public G4UserSteppingAction
    ~SteppingAction(){};
 
     void UserSteppingAction(const G4Step*);
-    G4double CalculateAngleX(G4StepPoint* point);
-    G4double CalculateAngleY(G4StepPoint* point);
-    bool     IsInDynamite(G4String);
-		bool			IsInTracker(G4String);
-		bool			IsInRangeTelescope(G4String);
-		G4int GetProcessType(G4String);
-    
+    G4double                CalculateAngleX(G4StepPoint* point);
+    G4double                CalculateAngleY(G4StepPoint* point);
+   
   private:
-  	DetectorConstruction* detector;
-  	RunAction*            runAction;
-  	HistoManager*					histoManager;
-  	EventAction*          eventAction;
+  	DetectorConstruction*   detector;
+  	RunAction*              runAction;
+  	HistoManager*	    	histoManager;
+  	EventAction*            eventAction;
   	
   	G4double absorber_eDep;      // total energy deposited per event in the absorber
   	G4int verboseLevel;

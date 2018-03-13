@@ -21,15 +21,15 @@ TrackingAction::~TrackingAction()
 
 void TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
-    if(aTrack->GetDynamicParticle()->GetPDGcode()==22) {
+    // The following lines of code print out the energy of all produced gammas in the simulation
+    /*if(aTrack->GetDynamicParticle()->GetPDGcode()==22) {
         G4cout << "New track #"
            << aTrack->GetTrackID() << " of " 
            << aTrack->GetParticleDefinition()->GetParticleName()
-           << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
+           << " Ekin = " << aTrack->GetKineticEnergy()/MeV << " MeV"
            << " parent # " << aTrack->GetParentID()
-           << G4endl;
-             
-    }
+           << G4endl;             
+    }*/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

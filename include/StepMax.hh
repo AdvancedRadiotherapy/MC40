@@ -16,11 +16,11 @@ class StepMax : public G4VDiscreteProcess
      StepMax(const G4String& processName ="UserStepMax");
     ~StepMax();
 
-     G4bool   IsApplicable(const G4ParticleDefinition&);    
-     void     SetMaxStep(G4double);
-     G4double GetMaxStep() {return MaxChargedStep;};
+     G4bool     IsApplicable(const G4ParticleDefinition&);    
+     void       SetMaxStep(G4double);
+     G4double   GetMaxStep() {return MaxChargedStep;};
      
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+     G4double   PostStepGetPhysicalInteractionLength( const G4Track& track,
 			                     G4double   previousStepSize,
 			                     G4ForceCondition* condition);
 

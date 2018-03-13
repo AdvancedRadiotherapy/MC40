@@ -68,9 +68,9 @@ DetectorConstruction::DetectorConstruction()
 	beampipe_innerradius = beampipe_outerradius - beampipe_thickness;
 	beampipe_hz          = 200*cm;
 	beampipe_angle       = 0.*deg;
-  beampipe_spanning    = 360.*deg;
+    beampipe_spanning    = 360.*deg;
   
-  // the Al collimator within the end of the beampipe
+    // the Al collimator within the end of the beampipe
 	alcollimator_outerradius = beampipe_innerradius; // sits snuggly inside the beampipe
 	alcollimator_innerradius = 2.2*cm; // this parameter is now set to a default value of 2*cm but changed in macros
 	alcollimator_hz          = 3.347*cm;
@@ -79,49 +79,46 @@ DetectorConstruction::DetectorConstruction()
 	
 	// the Havar window at end of beampipe
 	havarwindow_thickness   = 25*um;
-  havarwindow_outerradius = alcollimator_innerradius+havarwindow_thickness;
-  havarwindow_innerradius = alcollimator_innerradius;
-  havarwindow_startingPhi = 0.0*deg;
-  havarwindow_widthPhi    = 360.0*deg;
-  havarwindow_startingEta = 90.0*deg;
-  havarwindow_widthEta    = 90.0*deg;
+    havarwindow_outerradius = alcollimator_innerradius+havarwindow_thickness;
+    havarwindow_innerradius = alcollimator_innerradius;
+    havarwindow_startingPhi = 0.0*deg;
+    havarwindow_widthPhi    = 360.0*deg;
+    havarwindow_startingEta = 90.0*deg;
+    havarwindow_widthEta    = 90.0*deg;
   
-  // Proton Monitor Chamber
-  chamberposition_z     = 10.5*cm;
-  chamber_startingangle = 0.0*deg;
-  chamber_spanningangle = 360.0*deg;
-  chamber_alring_outerradius   = 50.0*mm;
-  chamber_alring_innerradius   = 96.5*mm/2.0;
-  chamber_alring_hz            = 1.4*mm;
+    // Proton Monitor Chamber
+    chamberposition_z     = 10.5*cm;
+    chamber_startingangle = 0.0*deg;
+    chamber_spanningangle = 360.0*deg;
+    chamber_alring_outerradius   = 50.0*mm;
+    chamber_alring_innerradius   = 96.5*mm/2.0;
+    chamber_alring_hz            = 1.4*mm;
 	chamber_window_outerradius = chamber_alring_innerradius;
-  chamber_window_innerradius = 0.0*mm;
-  ///chamber_window_hz          = 0.05*mm/2;
-	chamber_window_hz          = 0.05*mm; /// NOTE for now keep one window but twice the thicknes 
+    chamber_window_innerradius = 0.0*mm;
+	chamber_window_hz          = 0.05*mm;  
 	chamber_airgap_outerradius = chamber_alring_innerradius;
-  chamber_airgap_innerradius = 0.0*mm;
-  chamber_airgap_hz          = 1.2*mm;
-	/// NOTE need to add some graphite in there
-  
+    chamber_airgap_innerradius = 0.0*mm;
+    chamber_airgap_hz          = 1.2*mm;
     
-  // PMMA absorber
-  absorber_hx = 4.25*cm;
-  absorber_hy = 4.75*cm;
+    // PMMA absorber
+    absorber_hx = 4.25*cm;
+    absorber_hy = 4.75*cm;
 	absorber_hz = 1*mm;
-  absorber_posz = chamberposition_z + chamber_alring_hz*2 + absorber_hz + 5*cm; // always so downstream face touches monitor
-  absorber_material = Perspex;
+    absorber_posz = chamberposition_z + chamber_alring_hz*2 + absorber_hz + 5*cm; // always so downstream face touches monitor
+    absorber_material = Perspex;
 	
-			// Jig
-  // This will require 3 boxes to model correct shapes
-  jig_outer_hx       = 5.25*cm;
-  jig_outer_hy       = 8.5*cm;
-  jig_outer_hz       = 5.75*cm;
-  jig_hwallthickness = 0.5*cm;
-  jig_airgap_hx      = jig_outer_hx - 2*jig_hwallthickness;
-  jig_airgap_hy      = 5.5*cm;
-  jig_airgap_hz      = jig_outer_hz;
-  jig_posz           = chamberposition_z + chamber_alring_hz*2 + jig_outer_hz;
+	// Jig
+    // This will require 3 boxes to model correct shapes
+    jig_outer_hx       = 5.25*cm;
+    jig_outer_hy       = 8.5*cm;
+    jig_outer_hz       = 5.75*cm;
+    jig_hwallthickness = 0.5*cm;
+    jig_airgap_hx      = jig_outer_hx - 2*jig_hwallthickness;
+    jig_airgap_hy      = 5.5*cm;
+    jig_airgap_hz      = jig_outer_hz;
+    jig_posz           = chamberposition_z + chamber_alring_hz*2 + jig_outer_hz;
 
-		validation_hx = 6*cm;
+	validation_hx = 6*cm;
 	validation_hy = 6*cm;
 	validation_hz = 10*um;
 	validation_material = Air;
@@ -137,8 +134,7 @@ DetectorConstruction::DetectorConstruction()
 	firstScattererThickness = 80*um;
 	gafFilmPosition = G4ThreeVector(0.0*cm, 0.0*cm, 45*cm);
 	gafFilmSize = G4ThreeVector(5*cm, 5*cm, 0.0*cm); // do not allow Z to change so hard code later
-	scattererInVacuum = true;
-	reverseFilm = false;
+    reverseFilm = false;
 	
 	silicon_pos = 11.2*mm;
 	
@@ -160,34 +156,37 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 	// ==========================
 	
 	// Clean old geometry, if any
-  //
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
+    //
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
 	
 	// world volume which holds everything
 	// -----------------------------------
 	G4double expHall_x = 2*m;
-  G4double expHall_y = 1.5*m;
-  G4double expHall_z = 5.00*m;
+    G4double expHall_y = 1.5*m;
+    G4double expHall_z = 5.00*m;
 	
-  expHall_box = new G4Box("expHall_box", expHall_x,expHall_y,expHall_z);
-  expHall_log = new G4LogicalVolume( expHall_box, Air, "experimentalHall_log" );
+    expHall_box = new G4Box("expHall_box", expHall_x,expHall_y,expHall_z);
+    expHall_log = new G4LogicalVolume( expHall_box, Air, "experimentalHall_log" );
 	expHall_log->SetVisAttributes (expHall_vis);
-  expHall_phys = new G4PVPlacement( 0, G4ThreeVector(), expHall_log, "experimentalHall", 0, false, 0 );
+    expHall_phys = new G4PVPlacement( 0, G4ThreeVector(), expHall_log, "experimentalHall", 0, false, 0 );
 	
 	
 	ConstructBeamline(); 	
 	//ConstructValidation();
 	
 	ConstructPRaVDATable();
-	if(constructWaterTank)			 ConstructWaterTank();
-	if(constructScatteringSystem)	ConstructScatteringSystem();
+	if(constructWaterTank)			 
+        ConstructWaterTank();
+	if(constructScatteringSystem)	
+        ConstructScatteringSystem();
 	
 	if(filmType == "EBT3" || filmType == "HD-810")
 		ConstructGaFChromicFilm();
- 	return expHall_phys;
+ 	
+    return expHall_phys;
 }
 
 
@@ -205,8 +204,8 @@ void DetectorConstruction::ConstructBeamline()
 	G4double nozzle_thick_hZ = 0.5*cm;
 	G4double nozzle_mid_hZ = .5*cm;
  	G4Tubs* nozzle_thin = new G4Tubs("nozzle_thin", 25*mm, beampipe_outerradius, nozzle_thin_hZ, 0*deg, 360*deg);
-  G4Tubs* nozzle_thick = new G4Tubs("nozzle_thick", 25*mm, 6*cm, nozzle_thick_hZ, 0*deg, 360*deg);
-  G4UnionSolid* nozzle_back = new G4UnionSolid("nozzle_back", nozzle_thin, nozzle_thick, 0, G4ThreeVector(0.0*cm, 0.0*cm, nozzle_thin_hZ+nozzle_thick_hZ));
+    G4Tubs* nozzle_thick = new G4Tubs("nozzle_thick", 25*mm, 6*cm, nozzle_thick_hZ, 0*deg, 360*deg);
+    G4UnionSolid* nozzle_back = new G4UnionSolid("nozzle_back", nozzle_thin, nozzle_thick, 0, G4ThreeVector(0.0*cm, 0.0*cm, nozzle_thin_hZ+nozzle_thick_hZ));
 	G4Tubs* nozzle_mid = new G4Tubs("nozzle_mid", 5.1*cm, 6*cm, nozzle_mid_hZ, 0*deg, 360*deg);
 	G4UnionSolid* nozzle_front = new G4UnionSolid("nozzle_front", nozzle_mid, nozzle_thick, 0, G4ThreeVector(0,0,nozzle_mid_hZ+nozzle_thick_hZ));
 	G4UnionSolid* nozzle = new G4UnionSolid("nozzle", nozzle_back, nozzle_front, 0, G4ThreeVector(0,0,nozzle_mid_hZ+nozzle_thick_hZ+nozzle_thin_hZ+nozzle_thick_hZ));
@@ -379,9 +378,9 @@ void DetectorConstruction::ConstructBeamMonitor(G4double z)
 	chamber_airgap_phys = new G4PVPlacement(0, G4ThreeVector(0.0,0.0, +chamberposition_z), chamber_airgap_log, "chamberAirGap", expHall_log, false,0);
 		 
 	chamber_window = new G4Tubs("chamber_window", chamber_window_innerradius, chamber_window_outerradius, chamber_window_hz, chamber_startingangle, chamber_spanningangle);                                   
-  chamber_window_log = new G4LogicalVolume(chamber_window, Kapton, "chamber_window");
-  chamber_window_log->SetVisAttributes (chamber_window_vis);
-  chamber_window_phys1 = new G4PVPlacement(0, G4ThreeVector(0.0,0.0, +chamberposition_z + chamber_airgap_hz + chamber_window_hz), chamber_window_log, "chamberWindow1", expHall_log,true, 0);
+    chamber_window_log = new G4LogicalVolume(chamber_window, Kapton, "chamber_window");
+    chamber_window_log->SetVisAttributes (chamber_window_vis);
+    chamber_window_phys1 = new G4PVPlacement(0, G4ThreeVector(0.0,0.0, +chamberposition_z + chamber_airgap_hz + chamber_window_hz), chamber_window_log, "chamberWindow1", expHall_log,true, 0);
 	chamber_window_phys2 = new G4PVPlacement(0, G4ThreeVector(0.0,0.0, +chamberposition_z - chamber_airgap_hz - chamber_window_hz), chamber_window_log, "chamberWindow2", expHall_log, true, 1);
 }
 
@@ -397,13 +396,6 @@ void DetectorConstruction::SetDefaultColours()
 	chamber_window_vis  = new G4VisAttributes(G4Colour(1.,0.5,0.));    chamber_window_vis->SetVisibility(true);
 	absorber_vis        = new G4VisAttributes(G4Colour::Blue());       absorber_vis->SetVisibility(true);
 	jig_vis             = new G4VisAttributes(G4Colour::Green());      jig_vis->SetVisibility(true);
-	dynamite_Si3N4_vis  = new G4VisAttributes();                       dynamite_Si3N4_vis->SetVisibility(true);
-	dynamite_SiO2_vis   = new G4VisAttributes();                       dynamite_SiO2_vis->SetVisibility(true);
-	dynamite_epi_vis    = new G4VisAttributes(G4Colour::Yellow());     dynamite_epi_vis->SetVisibility(true);
-	dynamite_sub_vis    = new G4VisAttributes(G4Colour(1.,0.5,0.));    dynamite_sub_vis->SetVisibility(true);
-	dynamite_back_vis   = new G4VisAttributes(G4Colour::Grey());       dynamite_back_vis->SetVisibility(true);
-	tracker_vis         = new G4VisAttributes(G4Colour(1.,0.5,0.));    tracker_vis->SetVisibility(true);
-	tracker_pcb_vis     = new G4VisAttributes();                       tracker_pcb_vis->SetVisibility(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -426,15 +418,15 @@ G4double DetectorConstruction::GetBeamPipeInnerRadius()
 
 void DetectorConstruction::ConstructJig()
 {
-// This will require 3 solids and some subtractions and additions
-  G4VSolid* jig_volume = new G4Box("jig_volume",jig_outer_hx,jig_outer_hy,jig_outer_hz);                                   
-  G4VSolid* jig_air = new G4Box("jig_cutout",jig_airgap_hx,  jig_airgap_hy, jig_airgap_hz);  
-  G4VSolid* jig_brace = new G4Box("jig_brace",jig_outer_hx - 2*jig_hwallthickness, jig_hwallthickness,jig_hwallthickness);  
-  // remove the brace from air volume                               
-  G4VSolid* jig_minus_air = new G4SubtractionSolid("jig_minus_air",jig_volume,jig_air, 0,G4ThreeVector(0,3.0*cm,0.0));                                 
-  G4VSolid* jf = new G4UnionSolid("jig_frame", jig_minus_air,jig_brace,0,G4ThreeVector(0,jig_outer_hy-jig_hwallthickness,-jig_outer_hz+jig_hwallthickness));
+    // This will require 3 solids and some subtractions and additions
+    G4VSolid* jig_volume = new G4Box("jig_volume",jig_outer_hx,jig_outer_hy,jig_outer_hz);                                   
+    G4VSolid* jig_air = new G4Box("jig_cutout",jig_airgap_hx,  jig_airgap_hy, jig_airgap_hz);  
+    G4VSolid* jig_brace = new G4Box("jig_brace",jig_outer_hx - 2*jig_hwallthickness, jig_hwallthickness,jig_hwallthickness);  
+    // remove the brace from air volume                               
+    G4VSolid* jig_minus_air = new G4SubtractionSolid("jig_minus_air",jig_volume,jig_air, 0,G4ThreeVector(0,3.0*cm,0.0));                                 
+    G4VSolid* jf = new G4UnionSolid("jig_frame", jig_minus_air,jig_brace,0,G4ThreeVector(0,jig_outer_hy-jig_hwallthickness,-jig_outer_hz+jig_hwallthickness));
 	
-	jig_log = new G4LogicalVolume(jf, Perspex, "jig_log");
+    jig_log = new G4LogicalVolume(jf, Perspex, "jig_log");
   jig_log->SetVisAttributes(jig_vis);
  	jig_phys = new G4PVPlacement(0, G4ThreeVector(0.0, -2.25*cm, +jig_posz), jig_log, "jig", expHall_log, false, 0);
 }
@@ -552,26 +544,10 @@ void DetectorConstruction::DefineMaterials()
 	Steel->AddMaterial(Ni, fractionmass=0.08);
 	// Mylar (to match fluka)
 	Mylar = man->FindOrBuildMaterial("G4_MYLAR");
-	//Mylar = new G4Material("Mylar", density=1.397*g/cm3, ncomponents=3);
-	//Mylar->AddMaterial(H, fractionmass=0.3636);
-	//Mylar->AddMaterial(C, fractionmass=0.45451);
-	//Mylar->AddMaterial(O, fractionmass=0.1818);
-	// Kapton (to match fluka)
-	//Kapton = new G4Material("Kapton", density=1.42*g/cm3, ncomponents=4);
-	//Kapton->AddMaterial(C, fractionmass=0.6911);
-	//Kapton->AddMaterial(H, fractionmass=0.0262);
-	//Kapton->AddMaterial(N, fractionmass=0.0733);
-	//Kapton->AddMaterial(O, fractionmass=0.2094);
-	Kapton = man->FindOrBuildMaterial("G4_KAPTON");
+    Kapton = man->FindOrBuildMaterial("G4_KAPTON");
 	// Perspex
 	Perspex = man->FindOrBuildMaterial("G4_PLEXIGLASS");
-	/*Perspex = new G4Material("Perspex", density=1.19*g/cm3, ncomponents=3);
-	Perspex->AddMaterial(C, fractionmass=0.59984);//0.600);
-	Perspex->AddMaterial(O, fractionmass=0.31962);//0.320);
-	Perspex->AddMaterial(H, fractionmass=0.08054);//0.080);
-	Perspex->GetIonisation()->SetMeanExcitationEnergy(74.0*eV);*/
-	G4cout << "Perspex->GetIonisation()->GetMeanExcitationEnergy() = " <<  Perspex->GetIonisation()->GetMeanExcitationEnergy()/eV << G4endl;
-	// Havar (to match fluka)
+    // Havar (to match fluka simulation by F. Fiorini)
 	Havar = new G4Material("Havar", density=8.3*g/cm3, ncomponents=8);
 	Havar->AddMaterial(C,  0.9648*perCent);
 	Havar->AddMaterial(Cr, 22.2858*perCent);
@@ -682,11 +658,12 @@ void DetectorConstruction::ConstructWaterTank()
 	watertank_log = new G4LogicalVolume(watertank, Water, "watertank_log");
 	
 	G4double uStepMin = 10*um;
-  G4double uTrakMin = 10*um;
-  G4UserLimits* stepLimit = new G4UserLimits(uStepMin,uTrakMin);
-  watertank_log->SetUserLimits(stepLimit);
+    G4double uTrakMin = 10*um;
+    G4UserLimits* stepLimit = new G4UserLimits(uStepMin,uTrakMin);
+    watertank_log->SetUserLimits(stepLimit);
 	
-	if(watertankRegion) delete watertankRegion;
+	if(watertankRegion) 
+        delete watertankRegion;
 	watertankRegion = new G4Region("watertankRegion");
 	watertankRegion->AddRootLogicalVolume(watertank_log);
 	watertankRegion->SetProductionCuts(new G4ProductionCuts());

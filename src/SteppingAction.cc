@@ -84,14 +84,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 	// calculate the incident and exit angle from volumes
 	G4double incidentangleX   = CalculateAngleX(prePoint);
 	G4double incidentangleY   = CalculateAngleY(prePoint);
-	G4double exitangleX   		 = CalculateAngleX(postPoint);
-	G4double exitangleY  			 = CalculateAngleY(postPoint);
+	G4double exitangleX       = CalculateAngleX(postPoint);
+	G4double exitangleY  	  = CalculateAngleY(postPoint);
 	
 	// get the process type of the interaction
 	G4String 	processName  = postPoint->GetProcessDefinedStep()->GetProcessName();
-	G4int    	processType  = 0;//GetProcessType(processName);
-	
-	G4double x1 = prePoint->GetPosition().x();
+	G4int    	processType  = postPoint->GetProcessDefinedStep()->GetProcessSubType();
+    G4double x1 = prePoint->GetPosition().x();
 	G4double x2 = postPoint->GetPosition().x();
 	G4double x_mean =  x1 + G4UniformRand()*(x2-x1);
 		
@@ -227,51 +226,6 @@ G4double SteppingAction::CalculateAngleY(G4StepPoint* point)
 	G4double z = point->GetMomentumDirection().z();
 	G4double theta = atan(y/z) * 180/PI;
 	return theta;
-}
-
-bool SteppingAction::IsInDynamite(G4String pvname)
-{
-	//if( pvname.contains("dynamite_back") ) return false;
-	if( pvname.contains("dynamite") ) return true;
-	else return false;
-}
-
-bool SteppingAction::IsInTracker(G4String pvname)
-{
-	if( pvname.contains("tracker") || pvname.contains("string") ) return true;
-	else return false;
-}
-
-bool SteppingAction::IsInRangeTelescope(G4String pvname)
-{
-	if( pvname.contains("rangetel") ) return true;
-	else return false;
-}
-
-G4int SteppingAction::GetProcessType(G4String processName)
-{
-	if( processName == "phot" ) 									return 0;
-	else if( processName == "compt" ) 						return 1;
-	else if( processName == "conv" ) 						return 2;
-	else if( processName == "Rayl" ) 						return 3;
-	else if( processName == "msc" ) 							return 4;
-	else if( processName == "annihil" ) 					return 5;
-	else if( processName == "eIoni" ) 						return 6;
-	else if( processName == "eBrem" ) 						return 7;
-	else if( processName == "hIoni" ) 						return 8;
-	else if( processName == "hBrems" ) 					return 9;
-	else if( processName == "hPairProd" ) 				return 10;
-	else if( processName == "ionIoni" ) 					return 11;
-	else if( processName == "nuclearStopping" ) 	return 12;
-	else if( processName == "muMsc" ) 						return 13;
-	else if( processName == "muIoni" ) 					return 14;
-	else if( processName == "muBrems" ) 					return 15;
-	else if( processName == "muPairProd" ) 			return 16;
-	else if( processName == "CoulombScat" ) 			return 17;
-	else if( processName.contains("Elastic") ) 			return 18;
-	else if( processName.contains("Inelastic") ) 			return 19;
-	else if( processName == "nCapture" ) 				return 20;
-	else 																					return -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
