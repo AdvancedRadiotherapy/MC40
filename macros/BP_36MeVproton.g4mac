@@ -8,7 +8,7 @@
 /MC40/setCollimatorInnerRadius                        10 mm
 
 # choose whether or not to insert the 80um Ta foil to achieve a large beam
-/MC40/insertScatteringFoil True
+/MC40/insertScatteringFoil False
 
 # To obtain a BP set a depth and provide a material
 /MC40/setAbsorberDepth                                12 mm

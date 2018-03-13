@@ -128,7 +128,7 @@ DetectorConstruction::DetectorConstruction()
 	validation_pos[3] = G4ThreeVector(0.0,0.0,110.0*cm);
 	
 	scattererCollimator_radius = 5*mm;
-	scattering_material = Air;
+	scattering_material = Ta;
 	firstScattererPosition = G4ThreeVector(0.0*cm, 0.0*cm, -3200*mm);
 	firstScattererSize = G4ThreeVector(0.0*mm, 10.0*mm, 100*um);
 	firstScattererThickness = 80*um;
