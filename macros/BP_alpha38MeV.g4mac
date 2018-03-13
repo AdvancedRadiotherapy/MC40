@@ -5,21 +5,6 @@
 
 # set up the geometry of the beamline
 /det/setCollimatorInnerRadius                        22 mm
-/det/setDynamiteConstruction                         false
-/det/setDynamiteBackingDepth                         5 mm
-/det/setDoubleDynamiteConstruction                   false
-/det/setDoubleDynamiteSeperation                     10 cm
-/det/setTrackerConstruction                          false
-/det/setNTrackers                                    12
-/det/setRangeTelescopeConstruction                   false
-/det/setRangeTelescopeNLayers                        10
-/det/setRangeTelescopeLayerSeperation                1 cm
-/det/setRangeTelescopeAbsorberMaterial               Perspex
-/det/setRangeTelescopeAbsorberThickness              1 mm
-/det/setWaterTankConstruction                        false
-/det/setWaterTankWindowThickness                     1 mm
-/det/setScatteringMaterial                           G4_AIR
-
 /det/setAbsorberDepth                                1.00 mm
 /det/setAbsorberMaterial                             G4_PLEXIGLASS
 /det/setGaFChromicFilmPosition                       0 0 100 mm
@@ -29,7 +14,6 @@
 /phys/addPhysics                                     QGSP_BERT_HP
 /phys/setWorldCuts                                   0.7 mm
 #/phys/setAbsorberCuts                                0.001 mm
-#/phys/setWaterTankCuts                               0.001 mm
 
 # define histogram names
 /histo/setFileName                                   BP_alpha38MeV
